@@ -1,4 +1,7 @@
+import 'package:bitcoin_calculator/btcToUsd.dart';
 import 'package:flutter/material.dart';
+
+import 'usdToBtc.dart';
 
 void main() => runApp(MyApp());
 
@@ -6,8 +9,8 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Counter App',
-      home: MyHomePage(title: 'Counter App Home Page'),
+      title: 'Bitcoin Calculator',
+      home: MyHomePage(title: 'Bitcoin Calculator'),
     );
   }
 }
@@ -35,32 +38,48 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
+        backgroundColor: Colors.red,
       ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Text(
-              'You have pushed the button this many times:',
+            RaisedButton(
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(16.0))),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => usdToBtc()),
+                );
+              },
+              padding: EdgeInsets.only(left: 40.0, right: 40.0),
+              color: Colors.red,
+              child: Text(
+                'USD TO BTC',
+                style: new TextStyle(color: Colors.white),
+                key: Key('usdToBtc'),
+              ),
             ),
-            Text(
-              '$_counter',
-              // Provide a Key to this specific Text widget. This allows
-              // identifying the widget from inside the test suite,
-              // and reading the text.
-              key: Key('counter'),
-              style: Theme.of(context).textTheme.headline4,
-            ),
+            RaisedButton(
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(16.0))),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => btcToUsd()),
+                );
+              },
+              padding: EdgeInsets.only(left: 40.0, right: 40.0),
+              color: Colors.red,
+              child: Text(
+                'BTC TO USD',
+                style: new TextStyle(color: Colors.white),
+                key: Key('btcToUsd'),
+              ),
+            )
           ],
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        // Provide a Key to this button. This allows finding this
-        // specific button inside the test suite, and tapping it.
-        key: Key('increment'),
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: Icon(Icons.add),
       ),
     );
   }
