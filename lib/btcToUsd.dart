@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:bitcoin_calculator/utils/calculations.dart';
 
 class btcToUsd extends StatefulWidget {
   btcToUsd({Key key, this.title}) : super(key: key);
@@ -10,12 +11,13 @@ class btcToUsd extends StatefulWidget {
 }
 
 class _btcToUsd extends State<btcToUsd> {
-  int _counter = 0;
+  TextEditingController btc = TextEditingController();
+  bool _isNotEmpty = false;
+  bool usdColor = false;
+  double result;
 
   void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
+    setState(() {});
   }
 
   @override
@@ -30,20 +32,41 @@ class _btcToUsd extends State<btcToUsd> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Padding(
-              padding: EdgeInsets.only(left: 20, right: 20, top: 25),
+              padding: EdgeInsets.only(bottom: 15),
+              child: !usdColor
+                  ? Text("", style: TextStyle(color: Colors.white))
+                  : Text(
+                      "USD price is $result",
+                      style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.green),
+                      key: Key('result'),
+                    ),
+            ),
+            Padding(
+              padding: EdgeInsets.only(left: 20, right: 20, top: 155),
               child: Focus(
                 child: TextField(
-                  key: Key('enter-btc-field'),
-                  textAlign: TextAlign.left,
-                  keyboardType: TextInputType.number,
-                  decoration: InputDecoration(
-                      contentPadding: EdgeInsets.only(left: 10, right: 20),
-                      enabledBorder: new OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                        borderSide: new BorderSide(
-                            width: 2, color: Color.fromRGBO(76, 116, 139, 1)),
-                      )),
-                ),
+                    key: Key('enter-btc-field'),
+                    textAlign: TextAlign.left,
+                    keyboardType: TextInputType.number,
+                    controller: btc,
+                    decoration: InputDecoration(
+                        contentPadding: EdgeInsets.only(left: 10, right: 20),
+                        enabledBorder: new OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          borderSide: new BorderSide(
+                              width: 2, color: Color.fromRGBO(76, 116, 139, 1)),
+                        )),
+                    onChanged: (text) {
+                      if (text.isEmpty) {
+                        setState(() {
+                          _isNotEmpty = false;
+                          usdColor = false;
+                        });
+                      }
+                    }),
               ),
             ),
             Padding(
@@ -56,7 +79,16 @@ class _btcToUsd extends State<btcToUsd> {
                           borderRadius: BorderRadius.circular(30.0)),
                       minimumSize: Size(280, 40) // foreground
                       ),
-                  onPressed: () {},
+                  onPressed: () {
+                    result = double.tryParse(btc.text);
+
+                    if (btc.text.isNotEmpty) {
+                      setState(() {
+                        usdColor = true;
+                        result = CurrencyCalculations.btctousd(result);
+                      });
+                    }
+                  },
                   child: Text(
                     'Convert',
                     style: new TextStyle(color: Colors.white),

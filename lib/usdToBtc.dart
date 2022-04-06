@@ -1,4 +1,7 @@
+import 'package:bitcoin_calculator/main.dart';
+import 'package:bitcoin_calculator/utils/calculations.dart';
 import 'package:flutter/material.dart';
+import 'main.dart';
 
 class usdToBtc extends StatefulWidget {
   usdToBtc({Key key, this.title}) : super(key: key);
@@ -10,12 +13,13 @@ class usdToBtc extends StatefulWidget {
 }
 
 class _usdToBtc extends State<usdToBtc> {
-  int _counter = 0;
+  TextEditingController usd = TextEditingController();
+  double result;
+  bool _isNotEmpty = false;
+  bool btcColor = false;
 
   void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
+    setState(() {});
   }
 
   @override
@@ -30,11 +34,25 @@ class _usdToBtc extends State<usdToBtc> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Padding(
-              padding: EdgeInsets.only(left: 20, right: 20, top: 25),
+              padding: EdgeInsets.only(top: 15),
+              child: !btcColor
+                  ? Text("", style: TextStyle(color: Colors.white))
+                  : Text(
+                      "BTC price is $result",
+                      style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.green),
+                      key: Key('result'),
+                    ),
+            ),
+            Padding(
+              padding: EdgeInsets.only(left: 20, right: 20, top: 105),
               child: Focus(
                 child: TextField(
                   key: Key('enter-usd-field'),
                   textAlign: TextAlign.left,
+                  controller: usd,
                   keyboardType: TextInputType.number,
                   decoration: InputDecoration(
                       contentPadding: EdgeInsets.only(left: 10, right: 20),
@@ -43,26 +61,50 @@ class _usdToBtc extends State<usdToBtc> {
                         borderSide: new BorderSide(
                             width: 2, color: Color.fromRGBO(76, 116, 139, 1)),
                       )),
+                  onChanged: (text) {
+                    if (text.isEmpty) {
+                      setState(() {
+                        _isNotEmpty = false;
+                        btcColor = false;
+                      });
+                    }
+                  },
                 ),
+                onFocusChange: (hadFocus) {
+                  setState(() {
+                    _isNotEmpty = hadFocus;
+                  });
+                },
               ),
             ),
             Padding(
                 padding: EdgeInsets.only(top: 25),
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                      primary: Colors.red, // background
-                      onPrimary: Colors.red,
+                      primary: _isNotEmpty
+                          ? Colors.red
+                          : Color.fromRGBO(226, 226, 226, 1), // background
+                      onPrimary: Colors.white,
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(30.0)),
                       minimumSize: Size(280, 40) // foreground
                       ),
-                  onPressed: () {},
+                  onPressed: () {
+                    result = double.tryParse(usd.text);
+
+                    if (usd.text.isNotEmpty) {
+                      setState(() {
+                        btcColor = true;
+                        result = CurrencyCalculations.usdtobtc(result);
+                      });
+                    }
+                  },
                   child: Text(
                     'Convert',
                     style: new TextStyle(color: Colors.white),
                     key: Key('convert-button'),
                   ),
-                ))
+                )),
           ],
         ),
       ),
