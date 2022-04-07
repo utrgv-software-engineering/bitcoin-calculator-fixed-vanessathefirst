@@ -6,24 +6,23 @@ import 'package:flutter_driver/flutter_driver.dart';
 import 'package:test/test.dart';
 
 void main() {
+  FlutterDriver driver;
+
+  // Connect to the Flutter driver before running any tests.
+  setUpAll(() async {
+    driver = await FlutterDriver.connect();
+  });
+
+  // Close the connection to the driver after the tests have completed.
+  tearDownAll(() async {
+    if (driver != null) {
+      driver.close();
+    }
+  });
   group('Happy Paths', () {
     // First, define the Finders and use them to locate widgets from the
     // test suite. Note: the Strings provided to the `byValueKey` method must
     // be the same as the Strings we used for the Keys in step 1.
-
-    FlutterDriver driver;
-
-    // Connect to the Flutter driver before running any tests.
-    setUpAll(() async {
-      driver = await FlutterDriver.connect();
-    });
-
-    // Close the connection to the driver after the tests have completed.
-    tearDownAll(() async {
-      if (driver != null) {
-        driver.close();
-      }
-    });
 
     test('testing usd to btc', () async {
       //first Screen
@@ -42,7 +41,7 @@ void main() {
       expect(
           await driver.getText(result), 'BTC price is 0.00002287947322300851');
       await driver.tap(doneButton);
-    });
+    }, skip: true);
 
     test('testing btc to usd', () async {
       // First, tap the button.
@@ -60,24 +59,10 @@ void main() {
       final doneButton = find.byValueKey('done-button');
       expect(await driver.getText(result), 'USD price is 655609.5');
       await driver.tap(doneButton);
-    });
-  }, skip: true);
+    }, skip: true);
+  });
 
   group("Sad Paths", () {
-    FlutterDriver driver;
-
-    // Connect to the Flutter driver before running any tests.
-    setUpAll(() async {
-      driver = await FlutterDriver.connect();
-    });
-
-    // Close the connection to the driver after the tests have completed.
-    tearDownAll(() async {
-      if (driver != null) {
-        driver.close();
-      }
-    });
-
     test('should give red message if input is empty usdtobtc', () async {
       final usdToBtc = find.byValueKey('usdToBtc');
       await driver.tap(usdToBtc);
@@ -107,7 +92,7 @@ void main() {
       await driver.waitFor(find.text(''));
       await driver.tap(convertBttn);
 
-      expect(await driver.getText(warning), 'Enter a Valid USD amount');
-    });
+      expect(await driver.getText(warning), 'Enter a Valid BTC amount');
+    }, skip: true);
   });
 }

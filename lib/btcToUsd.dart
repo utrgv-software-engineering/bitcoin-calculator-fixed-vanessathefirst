@@ -77,7 +77,7 @@ class _btcToUsd extends State<btcToUsd> {
               child: !usdColor2
                   ? Text("", style: TextStyle(color: Colors.white))
                   : Text(
-                      "Enter a Valid USD amount",
+                      "Enter a Valid BTC amount",
                       style: TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
