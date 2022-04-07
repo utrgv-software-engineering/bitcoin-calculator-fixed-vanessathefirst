@@ -10,7 +10,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Bitcoin Calculator',
-      home: MyHomePage(title: 'Bitcoin Calculator'),
+      home: MyHomePage(
+        title: 'Bitcoin Calculator',
+      ),
     );
   }
 }

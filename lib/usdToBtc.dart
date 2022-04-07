@@ -17,6 +17,7 @@ class _usdToBtc extends State<usdToBtc> {
   double result;
   bool _isNotEmpty = false;
   bool btcColor = false;
+  bool btcColor2 = false;
 
   void _incrementCounter() {
     setState(() {});
@@ -47,7 +48,7 @@ class _usdToBtc extends State<usdToBtc> {
                     ),
             ),
             Padding(
-              padding: EdgeInsets.only(left: 20, right: 20, top: 105),
+              padding: EdgeInsets.only(left: 20, right: 20, top: 55),
               child: Focus(
                 child: TextField(
                   key: Key('enter-usd-field'),
@@ -78,6 +79,19 @@ class _usdToBtc extends State<usdToBtc> {
               ),
             ),
             Padding(
+              padding: EdgeInsets.only(top: 15),
+              child: !btcColor2
+                  ? Text("", style: TextStyle(color: Colors.white))
+                  : Text(
+                      "Enter a Valid USD amount",
+                      style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.red),
+                      key: Key('warning'),
+                    ),
+            ),
+            Padding(
                 padding: EdgeInsets.only(top: 25),
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
@@ -97,14 +111,40 @@ class _usdToBtc extends State<usdToBtc> {
                         btcColor = true;
                         result = CurrencyCalculations.usdtobtc(result);
                       });
+                    } else if (usd.text.isEmpty || result == 0) {
+                      setState(() {
+                        btcColor2 = true;
+                      });
                     }
                   },
                   child: Text(
                     'Convert',
-                    style: new TextStyle(color: Colors.white),
+                    style: TextStyle(color: Colors.white),
                     key: Key('convert-button'),
                   ),
                 )),
+            Padding(
+                padding: EdgeInsets.only(top: 20),
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                      primary: Colors.red, // background
+                      onPrimary: Colors.red,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30.0)),
+                      minimumSize: Size(280, 40) // foreground
+                      ),
+                  onPressed: () {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => (MyApp())));
+                  },
+                  child: Text(
+                    'Done',
+                    key: Key('done-button'),
+                    style: TextStyle(
+                      color: Colors.white,
+                    ),
+                  ),
+                ))
           ],
         ),
       ),
