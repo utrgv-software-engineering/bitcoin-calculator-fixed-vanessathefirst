@@ -2,6 +2,7 @@ import 'package:bitcoin_calculator/main.dart';
 import 'package:flutter/material.dart';
 import 'package:bitcoin_calculator/utils/calculations.dart';
 import 'main.dart';
+import 'package:flutter/widgets.dart';
 
 class btcToUsd extends StatefulWidget {
   btcToUsd({Key key, this.title}) : super(key: key);
@@ -98,12 +99,18 @@ class _btcToUsd extends State<btcToUsd> {
                   onPressed: () {
                     result = double.tryParse(btc.text);
 
-                    if (btc.text.isNotEmpty) {
+                    if (btc.text.isNotEmpty &&
+                        btc.text != '0' &&
+                        btc.text != ',' &&
+                        btc.text != '.') {
                       setState(() {
                         usdColor = true;
                         result = CurrencyCalculations.btctousd(result);
                       });
-                    } else if (btc.text.isEmpty || result == 0) {
+                    } else if (btc.text.isEmpty ||
+                        result == 0 ||
+                        btc.text == ',' ||
+                        btc.text == '.') {
                       setState(() {
                         usdColor2 = true;
                       });
