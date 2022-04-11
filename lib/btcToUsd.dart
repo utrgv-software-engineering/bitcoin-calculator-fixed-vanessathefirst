@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:bitcoin_calculator/utils/calculations.dart';
 import 'main.dart';
 import 'package:flutter/widgets.dart';
+import 'package:bitcoin_calculator/config/globals.dart';
 
 class btcToUsd extends StatefulWidget {
   btcToUsd({Key key, this.title}) : super(key: key);
@@ -20,8 +21,12 @@ class _btcToUsd extends State<btcToUsd> {
   bool usdColor2 = false;
   double result;
 
-  void _incrementCounter() {
-    setState(() {});
+  Future<double> future;
+
+  @override
+  void initState() {
+    super.initState();
+    future = CurrencyCalculationsAPI.fetchCurrency(httpClient);
   }
 
   @override
@@ -105,7 +110,7 @@ class _btcToUsd extends State<btcToUsd> {
                         btc.text != '.') {
                       setState(() {
                         usdColor = true;
-                        result = CurrencyCalculations.btctousd(result);
+                        result = CurrencyCalculationsAPIReal.btctousd(result);
                       });
                     } else if (btc.text.isEmpty ||
                         result == 0 ||
@@ -143,7 +148,25 @@ class _btcToUsd extends State<btcToUsd> {
                       color: Colors.white,
                     ),
                   ),
-                ))
+                )),
+            Padding(padding: EdgeInsets.only(top: 10)),
+            FutureBuilder<double>(
+                future: future,
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    return Text(
+                      "Price: $value",
+                      style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white),
+                      key: Key('price'),
+                    );
+                  } else if (snapshot.hasError) {
+                    return Text("${snapshot.error}");
+                  }
+                  return CircularProgressIndicator();
+                })
           ],
         ),
       ),

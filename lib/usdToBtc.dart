@@ -1,3 +1,4 @@
+import 'package:bitcoin_calculator/config/globals.dart';
 import 'package:bitcoin_calculator/main.dart';
 import 'package:bitcoin_calculator/utils/calculations.dart';
 import 'package:flutter/material.dart';
@@ -20,8 +21,12 @@ class _usdToBtc extends State<usdToBtc> {
   bool btcColor = false;
   bool btcColor2 = false;
 
-  void _incrementCounter() {
-    setState(() {});
+  Future<double> future;
+
+  @override
+  void initState() {
+    super.initState();
+    future = CurrencyCalculationsAPI.fetchCurrency(httpClient);
   }
 
   @override
@@ -113,7 +118,7 @@ class _usdToBtc extends State<usdToBtc> {
                         usd.text != '.') {
                       setState(() {
                         btcColor = true;
-                        result = CurrencyCalculations.usdtobtc(result);
+                        result = CurrencyCalculationsAPIReal.usdtobtc(result);
                       });
                     } else if (usd.text.isEmpty ||
                         result == 0 ||
@@ -151,7 +156,25 @@ class _usdToBtc extends State<usdToBtc> {
                       color: Colors.white,
                     ),
                   ),
-                ))
+                )),
+            Padding(padding: EdgeInsets.only(top: 10)),
+            FutureBuilder<double>(
+                future: future,
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    return Text(
+                      "Price: $value",
+                      style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white),
+                      key: Key('price'),
+                    );
+                  } else if (snapshot.hasError) {
+                    return Text("${snapshot.error}");
+                  }
+                  return CircularProgressIndicator();
+                })
           ],
         ),
       ),
