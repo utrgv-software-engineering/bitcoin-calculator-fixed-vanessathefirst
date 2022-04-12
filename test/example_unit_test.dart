@@ -6,17 +6,17 @@ void main() {
     test("testing calculations for 1 usd", () {
       var test = CurrencyCalculations.usdtobtc(1);
       expect(test, 0.00002287947322300851);
-    });
+    }, skip: true);
 
     test("testing calculations for 10 usd", () {
       var test = CurrencyCalculations.usdtobtc(10);
       expect(test, 0.00022879473223008512);
-    });
+    }, skip: true);
 
     test("testing calculations for 100 usd", () {
       var test = CurrencyCalculations.usdtobtc(100);
       expect(test, 0.002287947322300851);
-    });
+    }, skip: true);
   });
 
   group("BTC to USD", () {
