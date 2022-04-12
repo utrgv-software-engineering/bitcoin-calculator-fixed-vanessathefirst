@@ -54,7 +54,7 @@ void main() {
       expect(await driver.getText(result), 'USD price is 655609.5');
       await driver.tap(doneButton);
     });
-  });
+  }, skip: true);
 
   group("Sad Paths", () {
     test('should give red message if input is empty usd to btc', () async {
@@ -200,5 +200,5 @@ void main() {
       expect(await driver.getText(warning), 'Enter a Valid BTC amount');
       await driver.tap(doneButton);
     });
-  });
+  }, skip: true);
 }
